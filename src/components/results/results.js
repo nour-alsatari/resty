@@ -5,7 +5,7 @@ const Results = (props) => {
     const regex = new RegExp('(ftp|https|http|localhost?)://[^ "]+$');
 
     // console.log(regex.test(url));
-    
+
     if (regex.test(url) && method) {
       return (
         <p>
@@ -14,7 +14,7 @@ const Results = (props) => {
         </p>
       );
     } else {
-      return <p> enter your request to see your results</p>;
+      return <p> enter a valid url that starts with http or https</p>;
     }
   }
 
