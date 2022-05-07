@@ -4,4 +4,4 @@ this is a clone app to postman where user can chose the method and send requests
 UML:
 !['uml'](./uml.png)
 
-Netlify link: 
+Netlify link: https://incomparable-concha-b02275.netlify.app/
