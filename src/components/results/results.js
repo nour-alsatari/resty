@@ -14,7 +14,7 @@ const [isLoading, setIsLoading] = useState(false)
         rows="20"
         cols="100"
         readOnly value={
-          props.fetchedData? JSON.stringify(props.fetchedData) : ''
+          props.fetchedData? JSON.stringify(props.fetchedData, null, 2) : ''
         }
       ></textarea>
     </>
