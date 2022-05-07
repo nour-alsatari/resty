@@ -1,26 +1,11 @@
 import "./results.css";
+import { useState } from "react";
 
 const Results = (props) => {
-  function userRequest(url, method) {
-    const regex = new RegExp('(ftp|https|http|localhost?)://[^ "]+$');
-
-    // console.log(regex.test(url));
-
-    if (regex.test(url) && method) {
-      return (
-        <p>
-          {" "}
-          the link you requested is {url} and your method is {method}{" "}
-        </p>
-      );
-    } else {
-      return <p> enter a valid url that starts with http or https</p>;
-    }
-  }
-
+  
+const [isLoading, setIsLoading] = useState(false)
   return (
     <>
-      {userRequest(props.url, props.method)}
       <label for="response">Response:</label> <br />
       <textarea
         className="textinput"
@@ -28,6 +13,9 @@ const Results = (props) => {
         name="response"
         rows="20"
         cols="100"
+        readOnly value={
+          props.fetchedData? JSON.stringify(props.fetchedData) : ''
+        }
       ></textarea>
     </>
   );

@@ -1,4 +1,6 @@
 //named export so i need to use {} when importing
+import './header.css';
+
 export const Header = function () {
   return (
     <>
