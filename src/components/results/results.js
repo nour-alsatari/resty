@@ -1,11 +1,12 @@
 import "./results.css";
-import { useState } from "react";
+import JSONPretty from "react-json-pretty";
+import JSONPrettyMon from "react-json-pretty/dist/monikai";
 
 const Results = (props) => {
-  
-const [isLoading, setIsLoading] = useState(false)
   return (
     <>
+      {console.log("logging fetched:", props.fetchedData)}
+      {props.loading && <p> loading...</p>}
       <label for="response">Response:</label> <br />
       <textarea
         className="textinput"
@@ -13,10 +14,17 @@ const [isLoading, setIsLoading] = useState(false)
         name="response"
         rows="20"
         cols="100"
-        readOnly value={
-          props.fetchedData? JSON.stringify(props.fetchedData, null, 2) : ''
+        readOnly
+        value={
+          props.fetchedData ? JSON.stringify(props.fetchedData, null, 2) : ""
         }
       ></textarea>
+      
+      {/* <JSONPretty
+        id="json-pretty"
+        theme={JSONPrettyMon}
+        data={props.fetchedData}
+      ></JSONPretty> */}
     </>
   );
 };
