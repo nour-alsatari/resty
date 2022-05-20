@@ -1,62 +1,82 @@
 import { Header } from "./components/header/header";
 import Form from "./components/form/form"; // not using {} because it's default export and can give it any name i want bcz it's anonymous
+// const Form = require("./components/form/form").default // is the same as import
 import { Results } from "./components/results/results"; // named export
 import { Footer } from "./components/footer/footer";
-import { useEffect, useState } from "react";
-// import axios from "https://unpkg.com/axios/dist/axios.min.js";
+import { useEffect, useRef, useState } from "react";
 
-// console.log(axios);
 
-// convert it to class tomorrow
 function App() {
   const [url, setUrl] = useState("");
   const [method, setMethod] = useState("get");
-  const [requestBody, setRequestBody] = useState("");
-  const [fetchedData, setFetchedData] = useState('')
+  const [requestBody, setrequestBody] = useState("");
+  const [fetchedData, setfetchedData] = useState("");
+  // const [headers, setHeaders] = useState("")
+  const [loading, setLoading] = useState(false);
 
-  // async function fetching() {
-  //  let fetched = await fetch('https://reqres.in/api/users?page=1')
-  // .then(response => response.json())
-  // .then(data => console.log(data));
-  // console.log(fetched);
-  // }
+  const entriesRef = useRef(false);
 
-
-  async function fetchAll (method, url, data){
-    let fetched = await fetch (url, {
-      method: method,
-      headers: data? {'Content-Type' : 'application/json'} : {},
-      if (data) {
-       return {body: JSON.stringify({data})}
-        
-      }
-
-    })
-   let temp = await fetched.json();
-     setFetchedData(temp) 
-
+  useEffect(() => {
+    if (entriesRef.current) {
+      console.log("method after update", method);
+      console.log("url after update", url);
+      console.log(
+        "requestBody after update in case of post and put",
+        requestBody
+      );
+    } else {
+      entriesRef.current = true;
     }
-  
-    // fetchAll(method, url, requestBody
-    //   ).then(res => console.log('post req',res))
-    
+  }, [method, url, requestBody]); //componentDidUpdate, when u update method and url do this (1)
 
+  useEffect(() => {
+    if (!loading) return; //if loading is false do nothing
+    // console.log(loading);
+    const fetchData = async (method, url, data) => {
+      let fetched = await fetch(url, {
+        method: method,
+        headers: data ? { "Content-Type": "application/json" } : {},
+        if(data) {
+          return { body: JSON.stringify({ data }) };
+        },
+      });
+
+      const res = await fetched.json();
+      // const headers = fetched.headers;
+      
+      // setHeaders(headers);
+      setfetchedData(res);
+
+      setLoading(false);
+    };
+    fetchData(method, url, requestBody);
+  }, [loading, method, url, requestBody]);
+
+  function handleChange(e) {
+    // console.log(e.target.methods);
+    // console.log(e.target.type);
+    console.log("inside the parent i will set");
+    if (e.target.type === "text") {
+      setUrl(e.target.value);
+    } else if (e.target.type === "select-one") {
+      setMethod(e.target.value);
+    } else if (e.target.type === "textarea") {
+      setrequestBody(e.target.value);
+    }
+    //set states inside the function
+  }
+  //changevalue to set states
 
   return (
     <div className="App">
       <Header />
       <Form
-        url={url}
-        setUrl={setUrl}
+        handleChange={handleChange}
         method={method}
-        setMethod={setMethod}
-        requestBody={requestBody}
-        setRequestBody={setRequestBody}
-        fetchAll={fetchAll}
+        url={url}
+        setLoading={setLoading}
       />
-      {/* {console.log(`after form submission my url is ${url} and my method is: ${method}`)} */}
-      {/* {sendReq()} */}
-      <Results url={url} method={method} fetchedData={fetchedData} />
+      <Results fetchedData={fetchedData} loading={loading} />
       <Footer />
     </div>
   );
