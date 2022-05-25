@@ -3,8 +3,14 @@ import Form from "./components/form/form"; // not using {} because it's default 
 // const Form = require("./components/form/form").default // is the same as import
 import { Results } from "./components/results/results"; // named export
 import { Footer } from "./components/footer/footer";
-import { useEffect, useRef, useState } from "react";
+import {History} from "./components/history/History"
+import { useEffect, useRef, useState, useReducer } from "react";
+import historyReducer, { addAction, removeAction } from "./Reducer";
 
+const initialState = {
+  historyList: [],
+  count: 0,
+};
 
 function App() {
   const [url, setUrl] = useState("");
@@ -13,6 +19,7 @@ function App() {
   const [fetchedData, setfetchedData] = useState("");
   // const [headers, setHeaders] = useState("")
   const [loading, setLoading] = useState(false);
+  const [state, dispacth] = useReducer(historyReducer, initialState); //1- not defined yet and i need to define them
 
   const entriesRef = useRef(false);
 
@@ -44,12 +51,15 @@ function App() {
       const res = await fetched.json();
       // const headers = fetched.headers;
       
+
       // setHeaders(headers);
       setfetchedData(res);
 
       setLoading(false);
     };
     fetchData(method, url, requestBody);
+    dispacth(addAction(url));
+
   }, [loading, method, url, requestBody]);
 
   function handleChange(e) {
@@ -67,6 +77,7 @@ function App() {
   }
   //changevalue to set states
 
+
   return (
     <div className="App">
       <Header />
@@ -77,6 +88,7 @@ function App() {
         setLoading={setLoading}
       />
       <Results fetchedData={fetchedData} loading={loading} />
+      <History historyList={state.historyList} setLoading={setLoading}/>
       <Footer />
     </div>
   );

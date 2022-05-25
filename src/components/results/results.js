@@ -3,6 +3,7 @@ import JSONPretty from "react-json-pretty";
 import JSONPrettyMon from "react-json-pretty/dist/monikai";
 
 const Results = (props) => {
+ 
   return (
     <>
       {console.log("logging fetched:", props.fetchedData)}
@@ -25,6 +26,8 @@ const Results = (props) => {
         theme={JSONPrettyMon}
         data={props.fetchedData}
       ></JSONPretty> */}
+
+  
     </>
   );
 };
